@@ -21,7 +21,6 @@ import sun.misc.Signal;
  */
 public class JmsProducerApp {
 
-    private static final String BROKER_URL = "tcp://sg01.silkmq.org";
     private static final boolean USE_BATCH = false;
 
     private static final AtomicBoolean interrupted = new AtomicBoolean(false);
@@ -55,7 +54,7 @@ public class JmsProducerApp {
             });
             System.err.println("Press Ctrl+C to exit");
 
-            // receive and dump messages
+            // produce messages
             while (!interrupted.get()) {
                 String text = createNewMessage(source);
                 Message msg = session.createTextMessage(text);
