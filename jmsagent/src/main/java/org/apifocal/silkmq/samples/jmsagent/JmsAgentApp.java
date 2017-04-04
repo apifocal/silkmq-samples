@@ -91,7 +91,7 @@ public class JmsAgentApp {
     }
 
     public static void printSentMessage(Message message) throws JMSException, IOException {
-        System.out.printf("Sending: %s\n", JmsMessageUtil.getContents(message));
+        System.out.printf("Sending : %s\n", JmsMessageUtil.getContents(message));
     }
 
     public static String createNewMessage(String source) {
