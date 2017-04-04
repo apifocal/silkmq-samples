@@ -52,7 +52,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.apifocal.silkmq.samples.jmsconsumer.App</mainClass>
+                            <mainClass>org.apifocal.silkmq.samples.jmsproducer.JmsProducerApp</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
