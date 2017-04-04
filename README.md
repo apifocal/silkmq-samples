@@ -22,3 +22,15 @@
         broker URL -------------------+                       |
         queue ------------------------------------------------+
 
+## JMS agent
+
+    java -jar jmsagent/target/jmsagent-1.0.0-SNAPSHOT-jar-with-dependencies.jar \
+                   Alice karaf karaf tcp://localhost:61616 1000
+                     |      |     |          |               |
+         agent ID ---+      |     |          |               |
+         username ----------+     |          |               |
+         password ----------------+          |               |
+         broker URL -------------------------+               |
+         message delay in millis-----------------------------+
+
+
