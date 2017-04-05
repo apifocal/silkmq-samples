@@ -8,8 +8,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
-import javax.jms.Queue;
 import javax.jms.Session;
+import javax.jms.Topic;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +47,9 @@ public class JmsAgentApp {
             Session session = connection.createSession(USE_BATCH, Session.AUTO_ACKNOWLEDGE);
 
             // start receiving messages
-            Queue queue = session.createQueue("SilkMQ.Demo.JMSAgents");
+            Topic topic = session.createTopic("SilkMQ.Demo.JMSAgents");
             String selector = AGENT_ID + " <> '" + agentId + "'";
-            MessageConsumer consumer = session.createConsumer(queue, selector);
+            MessageConsumer consumer = session.createConsumer(topic, selector);
             consumer.setMessageListener(new JmsAgentMonitor(agentId, Duration.ofMillis(delay * 5)));
 
             // exit on Ctrl+C
@@ -65,7 +65,7 @@ public class JmsAgentApp {
             LOG.info("Press Ctrl+C to exit");
 
             // and send some messages in the meantime
-            MessageProducer producer = session.createProducer(queue);
+            MessageProducer producer = session.createProducer(topic);
 
             // generate some messages
             while (!interrupted.get()) {
@@ -73,7 +73,7 @@ public class JmsAgentApp {
                 Message msg = session.createTextMessage(text);
                 msg.setStringProperty(AGENT_ID, agentId);
                 printSentMessage(msg);
-                producer.send(queue, msg);
+                producer.send(topic, msg);
                 Thread.sleep(delay);
             }
 
