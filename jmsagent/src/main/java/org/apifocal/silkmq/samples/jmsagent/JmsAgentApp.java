@@ -2,9 +2,6 @@ package org.apifocal.silkmq.samples.jmsagent;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.jms.Connection;
 import javax.jms.JMSException;
@@ -34,7 +31,7 @@ public class JmsAgentApp {
     public static void main(String[] args) {
         try {
             if (args.length != 5) {
-                System.err.println("usage: java -jar blah.jar agent-id jms-username jms-password jms-broker-url delay");
+                System.err.println("usage: java -jar jmsagent.jar agent-id jms-username jms-password jms-broker-url delay");
                 System.exit(-1);
             }
 
@@ -49,25 +46,23 @@ public class JmsAgentApp {
             connection.start();
             Session session = connection.createSession(USE_BATCH, Session.AUTO_ACKNOWLEDGE);
 
-            // exit on Ctrl+C
-            Signal.handle(new Signal("INT"), (Signal signal) -> {
-                interrupted.set(true);
-                LOG.info("Exiting on SIG{}", signal.getName());
-            });
-            LOG.info("Press Ctrl+C to exit");
-
             // start receiving messages
             Queue queue = session.createQueue("SilkMQ.Demo.JMSAgents");
             String selector = AGENT_ID + " <> '" + agentId + "'";
             MessageConsumer consumer = session.createConsumer(queue, selector);
-            consumer.setMessageListener(new JmsAgentMonitor(agentId, Duration.ofMillis(delay * 10)));
+            consumer.setMessageListener(new JmsAgentMonitor(agentId, Duration.ofMillis(delay * 5)));
 
             // exit on Ctrl+C
             Signal.handle(new Signal("INT"), (Signal signal) -> {
                 interrupted.set(true);
-                System.err.printf("Exiting on SIG%s\n", signal.getName());
+                LOG.info("Exiting on SIG{}", signal.getName());
+                try {
+                    connection.close();
+                } catch (JMSException ex) {
+                    LOG.error("Exception", ex);
+                }
             });
-            System.err.println("Press Ctrl+C to exit");
+            LOG.info("Press Ctrl+C to exit");
 
             // and send some messages in the meantime
             MessageProducer producer = session.createProducer(queue);
@@ -91,7 +86,7 @@ public class JmsAgentApp {
     }
 
     public static void printSentMessage(Message message) throws JMSException, IOException {
-        System.out.printf("Sending : %s\n", JmsMessageUtil.getContents(message));
+        LOG.info("Sending : {}", JmsMessageUtil.getContents(message));
     }
 
     public static String createNewMessage(String source) {
@@ -100,8 +95,6 @@ public class JmsAgentApp {
         builder.append(counter++);
         builder.append(" from ");
         builder.append(source);
-        builder.append(" on ");
-        builder.append(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME));
         return builder.toString();
     }
 

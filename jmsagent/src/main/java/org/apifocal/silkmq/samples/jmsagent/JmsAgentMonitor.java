@@ -72,6 +72,6 @@ public class JmsAgentMonitor implements MessageListener {
 
     public static void printReceivedMessage(Message message) throws JMSException, IOException {
 //        System.out.printf("Received: %s %s %s\n", message.getJMSMessageID(), JmsMessageUtil.getType(message), JmsMessageUtil.getContents(message));
-        System.out.printf("Received: %s\n", JmsMessageUtil.getContents(message));
+        LOG.info("Received: {} (sent at {})", JmsMessageUtil.getContents(message), JmsMessageUtil.getTime(message));
     }
 }

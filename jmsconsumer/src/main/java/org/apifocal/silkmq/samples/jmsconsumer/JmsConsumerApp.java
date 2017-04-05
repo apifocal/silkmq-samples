@@ -26,7 +26,7 @@ public class JmsConsumerApp {
     public static void main(String[] args) {
         try {
             if (args.length != 4) {
-                System.err.println("usage: java -jar blah.jar jms-username jms-password jms-broker-url jms-destination");
+                System.err.println("usage: java -jar jmsconsumer.jar jms-username jms-password jms-broker-url jms-destination");
                 System.exit(-1);
             }
 

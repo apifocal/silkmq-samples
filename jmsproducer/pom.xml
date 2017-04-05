@@ -68,6 +68,15 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- suppress warning that sun.misc.Signal is internal proprietary API and may be removed in a future release -->
+                    <compilerArgument>-XDignore.symbol.file</compilerArgument>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

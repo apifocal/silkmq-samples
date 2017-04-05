@@ -15,6 +15,14 @@
  */
 package org.apifocal.silkmq.samples.jmsagent;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import static java.time.temporal.ChronoField.HOUR_OF_DAY;
+import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
+import static java.time.temporal.ChronoField.SECOND_OF_MINUTE;
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -29,7 +37,7 @@ public class JmsMessageUtil {
         return m.getClass().getSimpleName();
     }
 
-    protected static String getContents(Message message) throws JMSException {
+    public static String getContents(Message message) throws JMSException {
         if (message instanceof TextMessage) {
             return ((TextMessage) message).getText();
         } else if (message instanceof BytesMessage) {
@@ -51,6 +59,21 @@ public class JmsMessageUtil {
         } else {
             return "[Not a text message]";
         }
+    }
+
+    public static DateTimeFormatter TIME_FORMATTER = new DateTimeFormatterBuilder()
+            .appendValue(HOUR_OF_DAY, 2)
+            .appendLiteral(':')
+            .appendValue(MINUTE_OF_HOUR, 2)
+            .optionalStart()
+            .appendLiteral(':')
+            .appendValue(SECOND_OF_MINUTE, 2)
+            .toFormatter();
+
+    public static String getTime(Message message) throws JMSException {
+        Instant timestamp = Instant.ofEpochMilli(message.getJMSTimestamp());
+        ZonedDateTime dateTime = timestamp.atZone(ZoneId.systemDefault());
+        return dateTime.format(TIME_FORMATTER);
     }
 
 }

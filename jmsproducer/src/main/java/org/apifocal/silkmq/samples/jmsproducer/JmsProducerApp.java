@@ -29,7 +29,7 @@ public class JmsProducerApp {
     public static void main(String[] args) {
         try {
             if (args.length != 6) {
-                System.err.println("usage: java -jar blah.jar source jms-username jms-password jms-broker-url jms-destination");
+                System.err.println("usage: java -jar jmsproducer.jar source jms-username jms-password jms-broker-url jms-destination");
                 System.exit(-1);
             }
 
