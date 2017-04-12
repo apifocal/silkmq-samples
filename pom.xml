@@ -15,12 +15,16 @@
     <name>SilkMQ Samples :: Parent</name>
     <description>Parent project for SilkMQ sample projects</description>
 
-        <scm>
+    <scm>
         <connection>scm:git:git@github.com:apifocal/silkmq-samples.git</connection>
         <developerConnection>scm:git:git@github.com:apifocal/silkmq-samples.git</developerConnection>
         <tag>HEAD</tag>
         <url>https://github.com/apifocal/silkmq-samples</url>
     </scm>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://jenkins.apifocal.org/job/Dev/job/silkmq-samples/</url>
+    </ciManagement>
 
     <properties>
         <activemq.version>5.14.3</activemq.version>
